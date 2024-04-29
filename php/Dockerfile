@@ -9,30 +9,42 @@ WORKDIR /home/developer
 USER root
 
 # Install PHP 8 and Composer
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+          && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+          && apk update
+              
 RUN apk add --no-cache \
-  php8 \
-  php8-ctype \
-  php8-tokenizer \
-  php8-dom \
-  php8-curl \
-  php8-json \
-  php8-gd \
-  php8-mbstring \
-  php8-pdo \
-  php8-pdo_mysql \
-  php8-xml \
-  php8-xmlwriter \
-  php8-intl \
-  php8-pcntl \ 
-  php8-phar \
-  php8-posix \
+  php83 \
+  php83-ctype \
+  php83-tokenizer \
+  php83-simplexml \
+  php83-dom \
+  php83-curl \
+  php83-json \
+  php83-gd \
+  php83-mbstring \
+  php83-pdo \
+  php83-pdo_mysql \
+  php83-xml \
+  php83-xmlwriter \
+  php83-intl \
+  php83-pcntl \ 
+  php83-phar \
+  php-posix \
   python3 \
   py3-pip \
   py3-pynvim \
   composer && \
   rm -rf /var/cache/apk/*
 
-RUN rm /usr/bin/php && ln -s /usr/bin/php8 /usr/bin/php
+# RUN rm /usr/bin/php && ln -s /usr/bin/php8 /usr/bin/php
+RUN rm /usr/bin/php &&  ln -s /usr/bin/php83 /usr/bin/php
+
+# configuring extensions
+RUN echo "extension=tokenizer " >  /etc/php83/conf.d/00_tokenizer.ini 
+RUN echo "extension=dom " >  /etc/php83/conf.d/00_dom.ini 
+RUN echo "extension=simplexml " >  /etc/php83/conf.d/00_simplexml.ini 
+
 # Switch back as the developer user
 USER developer
 
@@ -59,6 +71,10 @@ COPY --chown=developer nvim/plugins.vim .config/nvim/plugins.vim
 
 RUN nvim +'PlugInstall' +qall
 
+# Change user to create a folder
+USER root
+RUN  chown developer .config/
+USER developer
 RUN mkdir -p .config/coc/extensions/@yaegassy/coc-phpstan-data && \
   chown developer:developer .config/coc/extensions/@yaegassy/coc-phpstan-data
 
@@ -77,4 +93,4 @@ RUN echo "runtime ./php/init.vim" >> .config/nvim/init.vim
 
 WORKDIR /home/developer/workspace
 
-ENTRYPOINT ["nvim", "./workspace"]
+ENTRYPOINT ["nvim", "/src"]

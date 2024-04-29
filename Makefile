@@ -21,7 +21,7 @@ release-ts: build-ts
 	docker push sh1d0w/nvim-typescript:latest
 	docker push sh1d0w/nvim-typescript:${RELEASE_VERSION}
 
-build-php: release-base
+build-php: build-base
 	docker build \
 		-t sh1d0w/nvim-php \
 		-t sh1d0w/nvim-php:${RELEASE_VERSION} \

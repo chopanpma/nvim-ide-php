@@ -24,7 +24,7 @@ ENV CMAKE_EXTRA_FLAGS=-DENABLE_JEMALLOC=OFF
 # Build nvim from source
 RUN git clone https://github.com/neovim/neovim \
   && cd neovim \
-  && git checkout stable \
+  && git checkout master \
   && make \ 
   && make install
 
