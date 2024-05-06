@@ -91,6 +91,6 @@ COPY --chown=developer nvim/coc-settings.json .config/nvim
 
 RUN echo "runtime ./php/init.vim" >> .config/nvim/init.vim
 
-WORKDIR /home/developer/workspace
+WORKDIR /src
 
 ENTRYPOINT ["nvim", "/src"]

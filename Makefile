@@ -11,7 +11,7 @@ release-base: build-base
 	docker push sh1d0w/alpine-nvim:latest
 	docker push sh1d0w/alpine-nvim:${RELEASE_VERSION}
 
-build-ts: release-base
+build-ts: build-base
 	docker build \
 		-t sh1d0w/nvim-typescript \
 		-t sh1d0w/nvim-typescript:${RELEASE_VERSION} \
